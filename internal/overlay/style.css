@@ -1,0 +1,12 @@
+body {
+    background: transparent;
+    color: white;
+    font-family: monospace;
+}
+
+.hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+}
