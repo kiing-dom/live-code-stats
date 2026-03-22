@@ -7,7 +7,7 @@ import (
 	"github.com/kiing-dom/live-code-stats/internal/backend/stats"
 )
 
-func updateHandler(w http.ResponseWriter, r *http.Request) {
+func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	var delta stats.Stats
 	json.NewDecoder(r.Body).Decode(&delta)
 
@@ -16,6 +16,6 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func statsHandler(w http.ResponseWriter, r *http.Request) {
+func StatsHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(stats.GetStats())
 }
