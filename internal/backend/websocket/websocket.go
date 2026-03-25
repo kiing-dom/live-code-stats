@@ -9,7 +9,18 @@ import (
 )
 
 var clients = make(map[*websocket.Conn]bool)
-var upgrader = websocket.Upgrader{}
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool { return true },
+}
+
+func HandleWs(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		return
+	}
+
+	clients[conn] = true
+}
 
 func Broadcast(data types.Stats) {
 	for client := range clients {
@@ -21,13 +32,4 @@ func Broadcast(data types.Stats) {
 			delete(clients, client)
 		}
 	}
-}
-
-func HandleWs(w http.ResponseWriter, r *http.Request) {
-	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		return
-	}
-
-	clients[conn] = true
 }
