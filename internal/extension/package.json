@@ -1,0 +1,15 @@
+{
+    "name": "live-code-stats",
+    "version": "0.0.1",
+    "main": "./out/extension.js",
+    "engines": {
+        "vscode": "^1.105.1"
+    },
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "contributes": {},
+    "devDependencies": {
+        "@types/vscode": "^1.110.0"
+    }
+}

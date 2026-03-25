@@ -1,0 +1,43 @@
+# --- General / OS ---
+.DS_Store
+.vscode/
+.idea/
+*.log
+.env
+.env.local
+
+# --- TypeScript / Node.js ---
+node_modules/
+dist/
+lib/
+out/
+build/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+
+# --- Go (Golang) ---
+# Compiled binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin/
+
+# Main binary (standard naming conventions)
+main
+app
+server
+
+# Go Test coverage
+*.out
+*.test
+vendor/
+
+# --- Tools / Bundlers ---
+.parcel-cache
+.next/
+.turbo/
