@@ -1,6 +1,10 @@
 package stats
 
-import "sync"
+import (
+	"sync"
+
+	"github.com/kiing-dom/live-code-stats/internal/"
+)
 
 type Stats struct {
 	Lines      int `json:"lines"`
@@ -18,6 +22,8 @@ func UpdateStats(delta Stats) {
 	stats.Lines += delta.Lines
 	stats.Errors += delta.Errors
 	stats.Keystrokes += delta.Keystrokes
+
+	Broadcast()
 }
 
 func GetStats() Stats {
