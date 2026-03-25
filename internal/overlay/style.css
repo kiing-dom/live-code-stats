@@ -1,6 +1,6 @@
 body {
     background: transparent;
-    color: white;
+    color: rgba(255, 255, 255, 0.4);
     font-family: monospace;
 }
 
@@ -9,4 +9,20 @@ body {
     top: 20px;
     left: 20px;
     font-size: 24px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.stat-lines  { color: #4fc3f7; }
+.stat-errors { color: #ef5350; }
+.stat-keys   { color: #66bb6a; }
+.stat-file   { color: #ffa726; }
+
+@keyframes flash {
+    0%   { opacity: 1; filter: brightness(1); }
+    30%  { opacity: 1; filter: brightness(2); }
+    100% { opacity: 1; filter: brightness(1); }
+}
+
+.flash {
+    animation: flash 0.4s ease-out;
 }

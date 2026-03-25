@@ -1,6 +1,7 @@
 package stats
 
 import (
+	"log"
 	"sync"
 
 	"github.com/kiing-dom/live-code-stats/internal/types"
@@ -9,16 +10,25 @@ import (
 var curr = types.Stats{}
 var mu sync.Mutex
 
-func UpdateStats(delta types.Stats) types.Stats {
+func UpdateStats(delta types.StatsDelta) types.Stats {
 	mu.Lock()
 	defer mu.Unlock()
 
-	curr.Lines += delta.Lines
-	curr.Errors += delta.Errors
-	curr.Keystrokes += delta.Keystrokes
+	if delta.Lines != nil {
+		curr.Lines = *delta.Lines
+	}
+	if delta.Errors != nil {
+		curr.Errors = *delta.Errors
+	}
+	if delta.Keystrokes != nil {
+		curr.Keystrokes = *delta.Keystrokes
+	}
+	if delta.FileName != nil {
+		curr.FileName = *delta.FileName
+	}
 
 	updated := curr
-	mu.Unlock()
+	log.Printf("[stats] lines=%d errors=%d keystrokes=%d file=%s", updated.Lines, updated.Errors, updated.Keystrokes, updated.FileName)
 
 	return updated
 }

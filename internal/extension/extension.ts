@@ -2,24 +2,39 @@ import * as vscode from 'vscode'
 
 export function activate(context: vscode.ExtensionContext) {
 
-    vscode.workspace.onDidChangeTextDocument(() => {
-        sendUpdate({ keystrokes: 1});
+    const keystrokeTimestamps: number[] = [];
+
+    vscode.workspace.onDidChangeTextDocument((e) => {
+        const now = Date.now();
+        keystrokeTimestamps.push(now);
+
+        const cutoff = now - 60000;
+        while (keystrokeTimestamps.length > 0 && keystrokeTimestamps[0] < cutoff) {
+            keystrokeTimestamps.shift();
+        }
+
+        sendUpdate({
+            keystrokes: keystrokeTimestamps.length,
+            file_name: e.document.fileName,
+        });
     });
 
     vscode.workspace.onDidSaveTextDocument((doc) => {
-        const lines = doc.lineCount;
-        sendUpdate({ lines: lines })
+        sendUpdate({ lines: doc.lineCount, file_name: doc.fileName });
     });
 
     vscode.languages.onDidChangeDiagnostics(() => {
-        const diagnostics = vscode.languages.getDiagnostics()
-        let errCount = 0;
+        const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor) return;
 
-        diagnostics.forEach(([_, diags]) => {
-            errCount += diags.length;
+        const activeFile = activeEditor.document.fileName;
+        const diagnostics = vscode.languages.getDiagnostics(activeEditor.document.uri);
+        const errCount = diagnostics.filter(d => d.severity === vscode.DiagnosticSeverity.Error).length;
+
+        sendUpdate({
+            errors: errCount,
+            file_name: activeFile
         });
-
-        sendUpdate({ errors: errCount });
     });
 }
 
