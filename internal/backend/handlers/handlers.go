@@ -5,13 +5,17 @@ import (
 	"net/http"
 
 	"github.com/kiing-dom/live-code-stats/internal/backend/stats"
+	"github.com/kiing-dom/live-code-stats/internal/backend/websocket"
+	"github.com/kiing-dom/live-code-stats/internal/types"
 )
 
 func UpdateHandler(w http.ResponseWriter, r *http.Request) {
-	var delta stats.Stats
+	var delta types.Stats
 	json.NewDecoder(r.Body).Decode(&delta)
 
-	stats.UpdateStats(delta)
+	updated := stats.UpdateStats(delta)
+
+	websocket.Broadcast(updated)
 
 	w.WriteHeader(http.StatusOK)
 }

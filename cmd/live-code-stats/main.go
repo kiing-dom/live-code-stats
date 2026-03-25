@@ -5,11 +5,13 @@ import (
 	"net/http"
 
 	"github.com/kiing-dom/live-code-stats/internal/backend/handlers"
+	"github.com/kiing-dom/live-code-stats/internal/backend/websocket"
 )
 
 func main() {
 	http.HandleFunc("/update", handlers.UpdateHandler)
 	http.HandleFunc("/stats", handlers.StatsHandler)
+	http.HandleFunc("/ws", websocket.HandleWS)
 
 	fmt.Println("server running on :8080")
 	http.ListenAndServe(":8080", nil)
