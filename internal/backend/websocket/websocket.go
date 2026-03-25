@@ -5,15 +5,15 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
-	"github.com/kiing-dom/live-code-stats/internal/backend/stats"
+	"github.com/kiing-dom/live-code-stats/internal/types"
 )
 
 var clients = make(map[*websocket.Conn]bool)
 var upgrader = websocket.Upgrader{}
 
-func Broadcast() {
+func Broadcast(data types.Stats) {
 	for client := range clients {
-		err := client.WriteJSON(stats.GetStats())
+		err := client.WriteJSON(data)
 		if err != nil {
 			fmt.Println(err)
 
@@ -23,7 +23,11 @@ func Broadcast() {
 	}
 }
 
-func wsHandler(w http.ResponseWriter, r *http.Request) {
-	conn, _ := upgrader.Upgrade(w, r, nil)
+func HandleWs(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		return
+	}
+
 	clients[conn] = true
 }

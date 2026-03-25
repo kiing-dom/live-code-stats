@@ -3,32 +3,24 @@ package stats
 import (
 	"sync"
 
-	"github.com/kiing-dom/live-code-stats/internal/"
+	"github.com/kiing-dom/live-code-stats/internal/types"
 )
 
-type Stats struct {
-	Lines      int `json:"lines"`
-	Errors     int `json:"errors"`
-	Keystrokes int `json:"keystrokes"`
-}
-
-var stats = Stats{}
+var curr = types.Stats{}
 var mu sync.Mutex
 
-func UpdateStats(delta Stats) {
+func UpdateStats(delta types.Stats) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	stats.Lines += delta.Lines
-	stats.Errors += delta.Errors
-	stats.Keystrokes += delta.Keystrokes
-
-	Broadcast()
+	curr.Lines += delta.Lines
+	curr.Errors += delta.Errors
+	curr.Keystrokes += delta.Keystrokes
 }
 
-func GetStats() Stats {
+func GetStats() types.Stats {
 	mu.Lock()
 	defer mu.Unlock()
 
-	return stats
+	return curr
 }
